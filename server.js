@@ -31,15 +31,19 @@ client.on('chat', function (channel, user, message, self) {
     if (message === "~worldpop") {
         client.say(channel, 'Current estimated World population is 7,736,055,641');
     }
-    
+
     if (message.startsWith("~calcdeath")) {
         if (message === "~calcdeath") {
-            client.say('manateeoverlord69', 'Use ~calcdeath "Country of Birth "your age"');
+            client.say(channel, 'Use ~calcdeath Country your age');
         }
-        else
-        const msg = message.split(' ');
-        var country = msg[1]; 
-        var age = msg[2];
-
+        else {
+            const msg = message.split(' ');
+            var country = msg[1];
+            var age = msg[2];
+            console.log(lifeExpectancy(country));
+            const A = lifeExpectancy(country);
+            console.log(A[0].life); 
+            client.say(channel,A[0].life);
+        }
     }
 });
