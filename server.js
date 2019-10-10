@@ -1,3 +1,4 @@
+const lifeExpectancy = require('life-expectancy');
 const tmi = require('tmi.js');
 const options = {
     options: {
@@ -9,9 +10,9 @@ const options = {
     },
     identity: {
         username: 'manateebot69',
-        password: ':)'
+        password: 'oauth:cn7v8azogsclgv7ls4n3bpfvhh5qf8'
     },
-    channels: ['manateeoverlord69', 'nymn']
+    channels: ['manateeoverlord69']
 };
 
 const client = new tmi.client(options);
@@ -19,22 +20,19 @@ client.connect();
 
 client.on('chat', function (channel, user, message, self) {
     if (message === "~pingme") {
-        client.say('nymn', user['display-name'] + ' pinged');
+        client.say(channel, user['display-name'] + ' pinged');
     }
     if (message === "~ping") {
         client.ping().then(function (data) {
             let ping = Math.floor(Math.round(data * 1000))
-            client.say('manateeoverlord69', 'Version 0.15, ping is ' + ping + 'ms');
+            client.say(channel, 'Version 0.16, ping is ' + ping + 'ms');
         })
     }
     if (message === "~worldpop") {
-        client.say('nymn', 'Current estimated World population is 7,736,055,641');
+        client.say(channel, 'Current estimated World population is 7,736,055,641');
     }
     if (message === "~calcdeath") {
-        client.say('nymn', 'Use ~calcdeath "Country of Birth "your age"');
+        client.say(channel, 'ttl')
+        //client.say('manateeoverlord69', 'Use ~calcdeath "Country of Birth "your age"');
     }
-
 });
-
-
-
