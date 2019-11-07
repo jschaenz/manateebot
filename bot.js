@@ -31,8 +31,8 @@ const options = {
         reconnect: true,
     },
     identity: {
-        username: 'manateebot69',
-        password: 'oauth:cn7v8azogsclgv7ls4n3bpfvhh5qf8'
+        username: 'username',
+        password: 'oath:key'
     },
     channels: ['manateeoverlord69', 'supinic']
 };
