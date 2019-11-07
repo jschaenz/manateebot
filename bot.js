@@ -34,7 +34,7 @@ const options = {
         username: 'username',
         password: 'oath:key'
     },
-    channels: ['manateeoverlord69', 'supinic']
+    channels: ['channels']
 };
  
 const client = new tmi.client(options);
