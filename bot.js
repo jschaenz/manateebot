@@ -4,7 +4,6 @@
 3	Claim a command prefix, and create a "bot" command that replies with a short description of your bot, what language it uses and who made it DONE
 
 4	Make it so your bot can adhere to global, unchangeable 1 second slowmode. Don't rely on your bot being VIP/mod. TBD
-
 5	Make it so your bot can bypass the Twitch 30s same - message slowmode - make your own implementation, don't rely on libraries. DONE
 
 6	Add a cooldown system to commands to avoid abuse.
@@ -22,6 +21,7 @@
 
 const lifeExpectancy = require('life-expectancy');
 const tmi = require('tmi.js');
+
 const options = {
     options: {
         debug: true,
@@ -31,10 +31,10 @@ const options = {
         reconnect: true,
     },
     identity: {
-        username: 'username',
-        password: 'oath:key'
+        username: 'manateebot69',
+        password: ''
     },
-    channels: ['channels']
+    channels: ['manateeoverlord69', 'supinic','nymn']
 };
  
 const client = new tmi.client(options);
@@ -55,30 +55,34 @@ client.connect();
 client.on("ROOMSTATE", args => { });
 
 client.on('chat', function (channel, user, message, self) {
+
     if (user['display-name'] === "manateeoverlord69") {
         var permission = 1;
     }
     else permission = 0;
 
     if (message === "]bot") {
-        client.say(channel, 'really basic bot made by manateeoverlord69 using nodejs. Do ]help for more info');
+        sendMsg(channel, 'really basic bot made by manateeoverlord69 using nodejs. Do ]help for more info');
     }
 
     if (message === "]help") {
-        client.say(channel, 'commands: ping, pingme, eval, calcdeath');
+        sendMsg(channel, 'commands: ping, pingme, eval, calcdeath');
     }
 
     if (message === "]ping") {
         client.ping().then(function (data) {
             let ping = Math.floor(Math.round(data * 1000))
-            client.say(channel, 'Ping to tmi is ' + ping + 'ms. Last update: November 6th');
+            sendMsg(channel, 'Ping to tmi is ' + ping + 'ms. Last update: November 6th');
         })
     }
 
-    if (message === "]pingme") {
-        client.say(channel, user['display-name'] + ' pinged');
+    if (message === "]github") {
+        sendMsg(channel, user['display-name'] + ' currently private');
     }
 
+    if (message === "]pingme") {
+        sendMsg(channel, user['display-name'] + ' pinged');
+    }
     if (message.startsWith("]eval")) {
         if (permission === 1) {
             if (message.startsWith("]eval say")) {
@@ -89,36 +93,42 @@ client.on('chat', function (channel, user, message, self) {
                     text += msg[i];
                     text += ' ';
                 }
-                client.say(channel, text);
+                sendMsg(channel, text);
             }
             else {
                 //make it do magic conmputer stuff
             }
         }
         else if (user['display-name'] != "manateebot69") {
-            client.say(channel, "You dont have permission to use this command! Maybe ask my owner for help FeelsDankMan")
+            sendMsg(channel, "You dont have permission to use this command! Maybe ask my owner for help FeelsDankMan")
         }
     }
 
     if (message.startsWith("]calcdeath")) {
         if (message === "]calcdeath") {
-            client.say(channel, 'Use ]calcdeath Country your age ---This command is currently unavailable until i implement an error catcher---');
+            sendMsg(channel, 'Use ]calcdeath Country Age');
         }
-        else {/*
-            const msg = message.split(' ');
-            var country = msg[1];
-            var age = msg[2];
-            const A = lifeExpectancy(country);
-            var lifeleft = Math.round(A[0].life - age);
-            var deathdate = Math.round(lifeleft + 2019);
-            if (lifeleft < 0) {
-                lifeleft = lifeleft * -1;
-                client.say(channel, user['display-name'] + ' By the avg. Life expectancy you would have died ' + lifeleft + ' years ago! That was in ' + deathdate);
+        else {
+            try {
+                const msg = message.split(' ');
+                var country = msg[1];
+                var age = msg[2];
+                const A = lifeExpectancy(country);
+                var lifeleft = Math.round(A[0].life - age);
+                var deathdate = Math.round(lifeleft + 2019);
+                if (lifeleft < 0) {
+                    lifeleft = lifeleft * -1;
+                    sendMsg(channel, user['display-name'] + ' By the avg. Life expectancy you would have died ' + lifeleft + ' years ago! That was in ' + deathdate);
+                }
+                else {
+                    sendMsg(channel, user['display-name'] + ' you have around ' + lifeleft + ' years of life left, meaning you will most likely die in ' + deathdate
+                    );
+                }
             }
-            else {
-                client.say(channel, user['display-name'] + ' you have around ' + lifeleft + ' years of life left, meaning you will most likely die in ' + deathdate
-                );
-            }*/
+            catch (err) {
+                    sendMsg(channel, user['display-name']+ ' ' + err + ' (Probably wrong country code FeelsDankMan )');
+                }
+            }
         }
-    }
+
 });
