@@ -5,9 +5,12 @@
 4	Make it so your bot can adhere to global, unchangeable 1 second slowmode. Don't rely on your bot being VIP/mod. DONE
 5	Make it so your bot can bypass the Twitch 30s same - message slowmode - make your own implementation, don't rely on libraries. DONE
 6	Add a cooldown system to commands to avoid abuse. DONE
+
 7	Create a command that uses an external API, like Twitch, or anything else you like.
+
 8	Implement a permission system to your commands, so that not everyone can use some specific commands. DONE
-9	Implement a debug / eval / say command that will make the bot output anything you tell it to in chat.Give it permission to yourself only.
+9	Implement a debug / eval / say command that will make the bot output anything you tell it to in chat.Give it permission to yourself only. DONE
+
 10	Implement a "help" command that dynamically shows the list of your bot's commands, either in chat, or on a website, or in pastebin. But it must be dynamic.
 11	Ping the supinic.com API regularly(not less frequently than once an hour when active) to signal that your bot is alive.
 12	Create your own database and make at least one command that works with it.
@@ -159,6 +162,9 @@ client.on('chat', async (channel, user, message, self)=> {
 
                     if (message.startsWith("]eval say")) {
                         sendMsg(channel, text);
+                    }
+                    else if (message === "]eval return eval(typeof kunszg)") {
+                        sendMsg(channel, "Racist");
                     }
                     else {
                         const evaluation = await eval('(async () => {' + text + '})()');
