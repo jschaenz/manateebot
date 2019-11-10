@@ -77,7 +77,7 @@ client.on('chat', async (channel, user, message, self)=> {
 
 
 
-    if (message.startsWith("]help")) {
+    if (message.startsWith("]commands")) {
         try {
 
             if (cooldownList.has(user['user-id'])) {
@@ -88,7 +88,7 @@ client.on('chat', async (channel, user, message, self)=> {
                     cooldownList.delete(user['user-id']);
                 }, 5000);
 
-                sendMsg(channel, 'commands: ping, pingme, eval, calcdeath');
+                sendMsg(channel, 'commands: ping, pingme, eval, say, calcdeath');
             }
         }
         catch (err) {
@@ -155,15 +155,11 @@ client.on('chat', async (channel, user, message, self)=> {
                     const msg = message.split(' ');
                     var i;
                     var text = '';
-                    for (i = 2; i < msg.length; i++) {
+                    for (i = 1; i < msg.length; i++) {
                         text += msg[i];
                         text += ' ';
                     }
-
-                    if (message.startsWith("]eval say")) {
-                        sendMsg(channel, text);
-                    }
-                    else if (message === "]eval return eval(typeof kunszg)") {
+                    if (message === "]eval return (typeof kunszg)") {
                         sendMsg(channel, "Racist");
                     }
                     else {
@@ -172,6 +168,38 @@ client.on('chat', async (channel, user, message, self)=> {
                         sendMsg(channel, String(evaluation));
                     }
                 }
+                else if (user['display-name'] != "manateebot69") {
+                    sendMsg(channel, "You dont have permission to use this command! Maybe ask my owner for help FeelsDankMan")
+                }
+            }
+        }
+        catch (err) {
+            sendMsg(channel, user['display-name'] + ' You did a fucky wucky! ' + err);
+        }
+    }
+
+    if (message.startsWith("]say")) {
+        try {
+            if (cooldownList.has(user['user-id'])) { }
+            else {
+                cooldownList.add(user['user-id']);
+                setTimeout(() => {
+                    cooldownList.delete(user['user-id']);
+                }, 1000);
+
+                if (permission === 1) {
+
+                    const msg = message.split(' ');
+                    var i;
+                    var text = '';
+                    for (i = 1; i < msg.length; i++) {
+                        text += msg[i];
+                        text += ' ';
+                    }
+
+                    sendMsg(channel, text);
+                }
+
                 else if (user['display-name'] != "manateebot69") {
                     sendMsg(channel, "You dont have permission to use this command! Maybe ask my owner for help FeelsDankMan")
                 }
