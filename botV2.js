@@ -6,19 +6,44 @@
 5	Make it so your bot can bypass the Twitch 30s same - message slowmode - make your own implementation, don't rely on libraries. DONE
 6	Add a cooldown system to commands to avoid abuse. DONE
 
-7	Create a command that uses an external API, like Twitch, or anything else you like.
-
+7	Create a command that uses an external API, like Twitch, or anything else you like. ping Supinic DONE
 8	Implement a permission system to your commands, so that not everyone can use some specific commands. DONE
 9	Implement a debug / eval / say command that will make the bot output anything you tell it to in chat.Give it permission to yourself only. DONE
 
 10	Implement a "help" command that dynamically shows the list of your bot's commands, either in chat, or on a website, or in pastebin. But it must be dynamic.
+
 11	Ping the supinic.com API regularly(not less frequently than once an hour when active) to signal that your bot is alive.
+
 12	Create your own database and make at least one command that works with it.
 13	Now that you have a database working with your bot, create an REST API that provides some sort of data back
 */
 
+const fetch = require("node-fetch");
 const lifeExpectancy = require('life-expectancy');
 const tmi = require('tmi.js');
+const dankList = require('./config.js')
+const cooldownList = new Set();
+const mincooldown = 1000;
+const pingTime = 600000;
+const pingAmount = [];
+var lastMessage = null;
+
+function sendMsg(channel, message) {
+    if (message === lastMessage) {
+        message = message + " \u{E0000} ";
+    }
+    lastMessage = message;
+    client.say(channel, message);
+}
+
+async function sendOnlineStatus() {
+    pingAmount.push('ping')
+    const ping = (await fetch(dankList.supiniactive, {
+        method: 'PUT',
+    }).then(response => response.json()))
+    console.log(ping)
+}
+setInterval(() => { sendOnlineStatus() }, pingTime);
 
 const options = {
     options: {
@@ -30,32 +55,19 @@ const options = {
     },
     identity: {
         username: 'manateebot69',
-        password: 'oauth:cn7v8azogsclgv7ls4n3bpfvhh5qf8'
+        password: dankList.oauth,
     },
-    channels: ['manateeoverlord69','nymn','supinic']
+    channels: dankList.activechannles
 };
-
 const client = new tmi.client(options);
-
-var lastMessage = null; //30s same message slowmode bypass, adds invisible char
-function sendMsg(channel, message) {
-    if (message === lastMessage) {
-        message = message + " \u{E0000} ";
-    }
-    lastMessage = message;
-    client.say(channel, message);
-}
-
 client.connect();
-const cooldownList = new Set();
 
-client.on('chat', async (channel, user, message, self)=> {
+client.on('chat', async (channel, user, message, self) => {
 
     if (user['display-name'] === "manateeoverlord69") {
         var permission = 1;
     }
     else permission = 0;
-
 
     if (message.startsWith("]bot")) {
         try {
@@ -67,7 +79,7 @@ client.on('chat', async (channel, user, message, self)=> {
                     cooldownList.delete(user['user-id']);
                 }, 5000);
 
-                sendMsg(channel, 'really basic bot made by manateeoverlord69 using nodejs. Do ]help for more info');
+                sendMsg(channel, 'really basic bot made by manateeoverlord69 using nodejs. Do ]commands for more info');
             }
         }
         catch (err) {
@@ -88,7 +100,7 @@ client.on('chat', async (channel, user, message, self)=> {
                     cooldownList.delete(user['user-id']);
                 }, 5000);
 
-                sendMsg(channel, 'commands: ping, pingme, eval, say, calcdeath');
+                sendMsg(channel, 'commands: bot, ping, pingme, eval, say, calcdeath, knownbots');
             }
         }
         catch (err) {
@@ -141,6 +153,74 @@ client.on('chat', async (channel, user, message, self)=> {
 
 
 
+    if (message.startsWith("]reservedforfuturecommand")) {
+        try {
+            if (cooldownList.has(user['user-id'])) {
+            }
+            else {
+                cooldownList.add(user['user-id']);
+                setTimeout(() => {
+                    cooldownList.delete(user['user-id']);
+                }, 5000);
+
+
+                sendMsg(channel, user['display-name'] + ' ' );
+            }
+        }
+        catch (err) {
+            sendMsg(channel, user['display-name'] + ' You did a fucky wucky! ' + err);
+        }
+    }
+
+
+
+    if (message.startsWith("]knownbots")) {
+        try {
+            const time = await fetch("https://supinic.com/api/bot/active")
+                .then(response => response.json());
+
+            if (cooldownList.has(user['user-id'])) {
+            }
+            else {
+                cooldownList.add(user['user-id']);
+                setTimeout(() => {
+                    cooldownList.delete(user['user-id']);
+                }, 5000);
+
+                function format(seconds) {
+                    var hours = Math.floor(seconds / (60 * 60));
+                    var minutes = Math.floor(seconds % (60 * 60) / 60);
+                    var seconds = Math.floor(seconds % 60);
+                    if (hours === 0 && minutes != 0) {
+                        return minutes + 'm ago';
+                    } else {
+                        if (minutes === 0 && hours === 0) {
+                            return seconds + "s ago"
+                        }
+                        else if (seconds === 0 || hours === 0 && minutes === 0) {
+                            return 'just now'
+                        }
+                        else {
+                            return hours + 'h ago'
+                        }
+                    }
+                } 
+                if (time.data.filter(i => i.lastSeenTimestamp != null)) {
+                 const bots = time.data.filter(i => i.lastSeenTimestamp != null).map(
+                        i => ' ' + i.name + ' ' + format(
+                        (Math.abs(new Date() - new Date(i.lastSeenTimestamp))) / 1000)
+                 );
+                    sendMsg(channel,user['username'] + ', bots reported to the API: ' + bots);
+                 }
+            }
+        }
+        catch (err) {
+            sendMsg(channel, user['display-name'] + ' You did a fucky wucky! ' + err);
+        }
+    }
+
+
+
     if (message.startsWith("]eval")) {
         try {
             if (cooldownList.has(user['user-id'])) { }
@@ -148,7 +228,7 @@ client.on('chat', async (channel, user, message, self)=> {
                 cooldownList.add(user['user-id']);
                 setTimeout(() => {
                     cooldownList.delete(user['user-id']);
-                }, 1000);
+                }, mincooldown);
             
                 if (permission === 1) {
 
@@ -177,6 +257,8 @@ client.on('chat', async (channel, user, message, self)=> {
             sendMsg(channel, user['display-name'] + ' You did a fucky wucky! ' + err);
         }
     }
+
+
 
     if (message.startsWith("]say")) {
         try {
@@ -209,7 +291,6 @@ client.on('chat', async (channel, user, message, self)=> {
             sendMsg(channel, user['display-name'] + ' You did a fucky wucky! ' + err);
         }
     }
-
 
 
 
