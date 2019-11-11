@@ -1,19 +1,15 @@
-/*
+/* Supinic.com Bot levels
 1	Make your bot connect to chat with any message - so we can see it's actually here. DONE
 2	Make your bot respond to any specific message. DONE
 3	Claim a command prefix, and create a "bot" command that replies with a short description of your bot, what language it uses and who made it DONE
 4	Make it so your bot can adhere to global, unchangeable 1 second slowmode. Don't rely on your bot being VIP/mod. DONE
 5	Make it so your bot can bypass the Twitch 30s same - message slowmode - make your own implementation, don't rely on libraries. DONE
 6	Add a cooldown system to commands to avoid abuse. DONE
-
 7	Create a command that uses an external API, like Twitch, or anything else you like. ping Supinic DONE
 8	Implement a permission system to your commands, so that not everyone can use some specific commands. DONE
 9	Implement a debug / eval / say command that will make the bot output anything you tell it to in chat.Give it permission to yourself only. DONE
-
 10	Implement a "help" command that dynamically shows the list of your bot's commands, either in chat, or on a website, or in pastebin. But it must be dynamic.
-
-11	Ping the supinic.com API regularly(not less frequently than once an hour when active) to signal that your bot is alive.
-
+11	Ping the supinic.com API regularly(not less frequently than once an hour when active) to signal that your bot is alive. eShrug kind of
 12	Create your own database and make at least one command that works with it.
 13	Now that you have a database working with your bot, create an REST API that provides some sort of data back
 */
@@ -26,6 +22,7 @@ const cooldownList = new Set();
 const mincooldown = 1000;
 const pingTime = 600000;
 const pingAmount = [];
+const year = 2019;
 var lastMessage = null;
 
 function sendMsg(channel, message) {
@@ -153,27 +150,6 @@ client.on('chat', async (channel, user, message, self) => {
 
 
 
-    if (message.startsWith("]reservedforfuturecommand")) {
-        try {
-            if (cooldownList.has(user['user-id'])) {
-            }
-            else {
-                cooldownList.add(user['user-id']);
-                setTimeout(() => {
-                    cooldownList.delete(user['user-id']);
-                }, 5000);
-
-
-                sendMsg(channel, user['display-name'] + ' ' );
-            }
-        }
-        catch (err) {
-            sendMsg(channel, user['display-name'] + ' You did a fucky wucky! ' + err);
-        }
-    }
-
-
-
     if (message.startsWith("]knownbots")) {
         try {
             const time = await fetch("https://supinic.com/api/bot/active")
@@ -187,7 +163,7 @@ client.on('chat', async (channel, user, message, self) => {
                     cooldownList.delete(user['user-id']);
                 }, 5000);
 
-                function format(seconds) {
+                function formatting(seconds) {
                     var hours = Math.floor(seconds / (60 * 60));
                     var minutes = Math.floor(seconds % (60 * 60) / 60);
                     var seconds = Math.floor(seconds % 60);
@@ -207,7 +183,7 @@ client.on('chat', async (channel, user, message, self) => {
                 } 
                 if (time.data.filter(i => i.lastSeenTimestamp != null)) {
                  const bots = time.data.filter(i => i.lastSeenTimestamp != null).map(
-                        i => ' ' + i.name + ' ' + format(
+                        i => ' ' + i.name + ' ' + formatting(
                         (Math.abs(new Date() - new Date(i.lastSeenTimestamp))) / 1000)
                  );
                     sendMsg(channel,user['username'] + ', bots reported to the API: ' + bots);
@@ -239,14 +215,9 @@ client.on('chat', async (channel, user, message, self) => {
                         text += msg[i];
                         text += ' ';
                     }
-                    if (message === "]eval return (typeof kunszg)") {
-                        sendMsg(channel, "Racist");
-                    }
-                    else {
-                        const evaluation = await eval('(async () => {' + text + '})()');
-                        console.log(evaluation)
-                        sendMsg(channel, String(evaluation));
-                    }
+                    const evaluation = await eval('(async () => {' + text + '})()');
+                    console.log(evaluation)
+                    sendMsg(channel, String(evaluation));
                 }
                 else if (user['display-name'] != "manateebot69") {
                     sendMsg(channel, "You dont have permission to use this command! Maybe ask my owner for help FeelsDankMan")
@@ -312,7 +283,7 @@ client.on('chat', async (channel, user, message, self) => {
                 var age = msg[2];
                 const A = lifeExpectancy(country);
                 var lifeleft = Math.round(A[0].life - age);
-                var deathdate = Math.round(lifeleft + 2019);
+                var deathdate = Math.round(lifeleft + year);
                 if (lifeleft < 0) {
                     lifeleft = lifeleft * -1;
                     sendMsg(channel, user['display-name'] + ' By the avg. Life expectancy you would have died ' + lifeleft + ' years ago! That was in ' + deathdate);
