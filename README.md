@@ -7,5 +7,6 @@ I, the owner of this code, am not responsible for any damage to person or proper
 All API Keys have been hidden, if you want to use the bot replace them with your own in the config.js file.
 Any questions are best answered in Twitch #nymn or #supinic where i am most often found.
 
-The life expectancy calculator uses data provided by https://github.com/hemanth/life-expectancy
+The life expectancy calculator uses data provided by https://github.com/hemanth/life-expectancy .
+
 The command cooldown was inspired by the implementation in KUNszgbot, https://github.com/KUNszg/kbot
