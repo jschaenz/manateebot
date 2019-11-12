@@ -18,9 +18,7 @@ function sendMsg(channel, message) {
 
 async function PingSupinicApi() {
     pingAmount.push('ping')
-    const ping = (await fetch(dankList.supiniactive, {
-        method: 'PUT',
-    }).then(response => response.json()))
+    const ping = (await fetch(dankList.supiniactive, {method: 'PUT',}).then(response => response.json()))
     console.log(ping)
 }
 setInterval(() => { PingSupinicApi() }, pingTime);
