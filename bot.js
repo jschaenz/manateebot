@@ -1,20 +1,3 @@
-/*
-1	Make your bot connect to chat with any message - so we can see it's actually here. DONE
-2	Make your bot respond to any specific message. DONE
-3	Claim a command prefix, and create a "bot" command that replies with a short description of your bot, what language it uses and who made it DONE
-4	Make it so your bot can adhere to global, unchangeable 1 second slowmode. Don't rely on your bot being VIP/mod. DONE
-5	Make it so your bot can bypass the Twitch 30s same - message slowmode - make your own implementation, don't rely on libraries. DONE
-6	Add a cooldown system to commands to avoid abuse. DONE
-7	Create a command that uses an external API, like Twitch, or anything else you like. 
-8	Implement a permission system to your commands, so that not everyone can use some specific commands. DONE
-9	Implement a debug / eval / say command that will make the bot output anything you tell it to in chat.Give it permission to yourself only. DONE
-
-10	Implement a "help" command that dynamically shows the list of your bot's commands, either in chat, or on a website, or in pastebin. But it must be dynamic.
-11	Ping the supinic.com API regularly(not less frequently than once an hour when active) to signal that your bot is alive.
-12	Create your own database and make at least one command that works with it.
-13	Now that you have a database working with your bot, create an REST API that provides some sort of data back
-*/
-
 const fetch = require("node-fetch");
 const lifeExpectancy = require('life-expectancy');
 const tmi = require('tmi.js');
