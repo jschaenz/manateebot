@@ -9,3 +9,5 @@ Any questions are best answered in Twitch #nymn or #supinic where i am most ofte
 The life expectancy calculator uses data provided by https://github.com/hemanth/life-expectancy .
 
 The command cooldown was inspired by the implementation in KUNszgbot
+
+next goal: dont use message.startsWith cause its MEGADANK
