@@ -4,7 +4,7 @@ const tmi = require('tmi.js');
 const dankList = require('./config.js')
 const cooldownList = new Set();
 const mincooldown = 1000;
-const pingTime = 300000;
+const pingTime = 3600000;
 const pingAmount = [];
 var lastMessage = null;
 
