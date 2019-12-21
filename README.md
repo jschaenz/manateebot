@@ -12,4 +12,4 @@ The command cooldown was inspired by the implementation in KUNszgbot
 
 
 Roadmap:
-~march: get website up and running, make commands its own module file, generally restructure commands layout
+~february/march: get website up and running, make commands its own module file, generally restructure commands layout
