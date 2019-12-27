@@ -1,4 +1,4 @@
-# Twitchbot made using NodeJS and TMI.js by manateeoverlord69.
+# Twitchbot made using NodeJS and TMI.js by mentiofficial.
 This Bot is not designed for a mission critical implementation, it is just a fun side project for learning Javascript.
 
 I, the owner of this code, am not responsible for any damage to person or property caused by this bot, use it at your own risk.
