@@ -1,5 +1,5 @@
 const life = require('./life.json');
-const client = require('./app.js');
+const client = require('./bot.js');
 const fetch = require("node-fetch")
 const prefix = "]";
 
