@@ -1,11 +1,14 @@
-//const fetch = require("node-fetch")
 const configs = require('./config.js');
+const cmds = require('./commands.js');
+const { ChatClient } = require("dank-twitch-irc");
+var Filter = require('bad-words'),
+filter = new Filter();
+const mincooldown = 1000;
+const cooldownList = new Set();
 const pingTime = 3600000;
 const pingAmount = [];
 var lastMessage = null;
-const cmds = require('./commands.js');
-const { ChatClient } = require("dank-twitch-irc");
-
+filter.removeWords('cock', 'hell');
 
 
 
@@ -57,10 +60,26 @@ client.on("PRIVMSG", msg => {
     }
 
     cmds.commands.forEach(async command => {
+        //set cooldown
         if (message[0] === command.name) {
-            let result = await command.invocation(text, msg.senderUserID);
-            console.log(result);
-            sendMsg(msg.channelName, result);
+            try {
+                if (cooldownList.has(msg.senderUserID)) {
+                }
+                else {
+                    cooldownList.add(msg.senderUserID);
+                    setTimeout(() => {
+                        cooldownList.delete(msg.senderUserID);
+                    }, mincooldown);
+
+                    let result = await command.invocation(text, msg.senderUserID);
+                    console.log(result);
+                    sendMsg(msg.channelName, filter.clean(result));
+
+                }
+            }
+            catch(err){
+                sendMsg(msg.channelName, String(err));
+            }
         }
     })
 
