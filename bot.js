@@ -11,7 +11,6 @@ var lastMessage = null;
 filter.removeWords('cock', 'hell');
 
 
-
 function sendMsg(channel, message) {
     if (message === lastMessage) {
         message = message + " \u{E0000} ";
@@ -60,7 +59,6 @@ client.on("PRIVMSG", msg => {
     }
 
     cmds.commands.forEach(async command => {
-        //set cooldown
         if (message[0] === command.name) {
             try {
                 if (cooldownList.has(msg.senderUserID)) {
@@ -82,7 +80,6 @@ client.on("PRIVMSG", msg => {
             }
         }
     })
-
 });
 
 
