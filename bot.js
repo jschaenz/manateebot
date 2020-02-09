@@ -69,10 +69,11 @@ client.on("PRIVMSG", msg => {
                         cooldownList.delete(msg.senderUserID);
                     }, mincooldown);
 
-                    let result = await command.invocation(text, msg.senderUserID);
-                    console.log(result);
-                    sendMsg(msg.channelName, filter.clean(result));
-
+                    let result = await command.invocation(text, msg.senderUserID, msg.displayName);
+                    if (result != -1) {
+                        console.log(result);
+                        sendMsg(msg.channelName, filter.clean(result));
+                    }
                 }
             }
             catch(err){
