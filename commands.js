@@ -1,5 +1,5 @@
 const life = require('./life.json');
-const client = require('./app.js');
+const single = require('./app.js');
 const fetch = require("node-fetch")
 const prefix = "]";
 
@@ -27,8 +27,8 @@ function Format(second) {
 
 const commands = [
     {
-        name: prefix + "commands",
-        invocation: async (text, senderUID) => {
+        name: prefix + "help",
+        invocation: async (text, senderUID, displayname) => {
            
             const trackObj = commands.filter(
                 i => i.name
@@ -40,23 +40,23 @@ const commands = [
             const comNumPre = ((comName.sort().toString().replace(/,/g, " | ").replace(/]/g, '') + " |").split('|')).length;
             const comNum = comNumPre - 1
 
-            return "There are " + comNum + " Commands in total:  " + comName.sort().toString().replace(/,/g, " | ").replace(/]/g, '');
+            return displayname +" ,There are " + comNum + " Commands in total:  " + comName.sort().toString().replace(/,/g, " | ").replace(/]/g, '');
         }
     },
 
 
     {
         name: prefix + "ping",
-        invocation: async (text, senderUID) => {
+        invocation: async (text, senderUID, displayname) => {
 
             const t0 = process.hrtime();
-            await client.client.ping();
+            await single.client.ping();
             const t1 = process.hrtime(t0);
             const latency = t1[0] * 1e3 + t1[1] / 1e6;
 
             const uptime = process.uptime();
             const version = process.version;
-            return (String("manateebot69v2, Node " + version + " uptime: " + Format(uptime) + " Ping: " + latency.tofixed()));
+            return (String(displayname + " ,manateebot69v2, Node " + version + " uptime: " + Format(uptime) + " Ping: " + latency.tofixed()));
             //todo: make work Okayga
         }
     },
@@ -64,17 +64,20 @@ const commands = [
 
     {
         name: prefix + "bot",
-        invocation: async (text, senderUID) => {
-            return ("manateebot69 V2 now running on dank-twitch-irc! Made by MentiOfficial in nodejs");
+        invocation: async (text, senderUID, displayname) => {
+            return (displayname + " ,manateebot69v2 now running on dank-twitch-irc! Made by MentiOfficial in nodejs. Try ]help for some more Info! ");
         }
     },
 
 
     {
         name: prefix + "eval",
-        invocation: async (text, senderUID) => {
+        invocation: async (text, senderUID, displayname) => {
             if (senderUID == "58055575") {
                 return (String(await eval('(async () => {' + text + '})()')));
+            }
+            else {
+                return -1;
             }
         }
     },
@@ -82,13 +85,15 @@ const commands = [
 
     {
         name: prefix + "bots",
-        invocation: async (text, senderUID) => {
+        invocation: async (text, senderUID, displayname) => {
             const time = await fetch("https://supinic.com/api/bot/active").then(response => response.json());
 
             if (time.data.filter(i => i.lastSeenTimestamp != null)) {
+
                 const activebots = time.data.filter(i => i.lastSeenTimestamp != null).map(
                     i => ' | ' + i.name + ' ' + Format((Math.abs(new Date() - new Date(i.lastSeenTimestamp))) / 1000));
-                return (String(activebots));
+
+                return (String(displayname + " , reported Bots are: " + activebots));
             }
         }
     },
@@ -96,7 +101,7 @@ const commands = [
 
     {
         name: "]calcdeath",
-        invocation: async (text, senderUID) => {
+        invocation: async (text, senderUID, displayname) => {
             //todo: parse life and get data correctly
             /*
             var country = msg[1];
