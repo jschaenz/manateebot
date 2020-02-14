@@ -52,8 +52,11 @@ const commands = [
             const latency = Math.floor(Math.random() * 101);
             const uptime = process.uptime();
             const version = process.version;
-            return displayname + " ,manateebot69v2, Node " + version + ", uptime: " + Format(uptime) + ", Ping: " + latency + " ms";
+            const mem = process.memoryUsage().heapUsed / 1024 / 1024;
+
+            return displayname + " ,manateebot69v2, Node " + version + ", uptime: " + Format(uptime) + ", Ping: " + latency + " ms, Memory used: " + Math.round(mem * 100) / 100 + " MB";
         }
+        
     },
 
 
@@ -97,36 +100,32 @@ const commands = [
     {
         name: "]calcdeath",
         invocation: async (text, senderUID, displayname) => {
+            if (text.length == 0) {
+                return "use ]calcdeath COUNTRY AGE";
+            }
+            let newText = text.split(" ");
+
+            const countryFromMsg = newText[0];
+            const age = newText[1];
 
             for (let i = 0; i < 183; i++) {
-                const count = (life[i].country + " ");
-                if (count == text[0]) { 
-                    console.log("test");
-                    return life[i].country;
+                const countryFromFile = life[i].country;
+                console.log(countryFromFile);
+
+
+                if (countryFromFile == countryFromMsg) { 
+                    let lifeleft = Math.round(life[i].life - age);
+                    let deathdate = Math.round(lifeleft + 2020);
+
+                    if (lifeleft < 0) {
+                        lifeleft = lifeleft * -1;
+                        return displayname + " By the avg. Life expectancy you would have died " + lifeleft + " years ago! That was in " + deathdate;
+                    }
+                    else return displayname + "you have around " + lifeleft + " years of life left, meaning you will most likely die in " + deathdate;
                 }
             }
-
-
-            //todo: parse life and get data correctly
-            /*
-            var country = msg[1];
-            var age = msg[2];
-            const A = life.LIFE;
-
-            var lifeleft = Math.round(A[0].life - age);
-            var deathdate = Math.round(lifeleft + 2019);
-            if (lifeleft < 0) {
-                lifeleft = lifeleft * -1;
-                sendMsg(channel, user['display-name'] + ' By the avg. Life expectancy you would have died ' + lifeleft + ' years ago! That was in ' + deathdate);
-            }
-            else {
-                sendMsg(channel, user['display-name'] + ' you have around ' + lifeleft + ' years of life left, meaning you will most likely die in ' + deathdate
-                );
-            }
-            */
         }
     }
-
 
 
 
