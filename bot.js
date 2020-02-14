@@ -45,8 +45,6 @@ client.joinAll(configs.activechannles);
 
 
 
-
-
 client.on("PRIVMSG", msg => {
     console.log(`[#${msg.channelName}] ${msg.senderUserID} ${msg.displayName}: ${msg.messageText}`);
 
@@ -71,13 +69,12 @@ client.on("PRIVMSG", msg => {
 
                     let result = await command.invocation(text, msg.senderUserID, msg.displayName);
                     if (result != -1) {
-                        console.log(result);
-                        sendMsg(msg.channelName, filter.clean(result));
+                        sendMsg(msg.channelName, filter.clean(String(result)));
                     }
                 }
             }
             catch(err){
-                sendMsg(msg.channelName, String(err));
+                sendMsg(msg.channelName, filter.clean(String(err)));
             }
         }
     })
