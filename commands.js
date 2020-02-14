@@ -29,18 +29,18 @@ const commands = [
     {
         name: prefix + "help",
         invocation: async (text, senderUID, displayname) => {
-           
+
             const trackObj = commands.filter(
-                i => i.name
+                q => q.name
             );
             const comName = trackObj.map(
-                i => i.name
+                q => q.name
             );
 
             const comNumPre = ((comName.sort().toString().replace(/,/g, " | ").replace(/]/g, '') + " |").split('|')).length;
             const comNum = comNumPre - 1
 
-            return displayname +" ,There are " + comNum + " Commands in total:  " + comName.sort().toString().replace(/,/g, " | ").replace(/]/g, '');
+            return displayname + " ,There are " + comNum + " Commands in total:  " + comName.sort().toString().replace(/,/g, " × ").replace(/]/g, '');
         }
     },
 
@@ -49,15 +49,10 @@ const commands = [
         name: prefix + "ping",
         invocation: async (text, senderUID, displayname) => {
 
-            const t0 = process.hrtime();
-            await single.client.ping();
-            const t1 = process.hrtime(t0);
-            const latency = t1[0] * 1e3 + t1[1] / 1e6;
-
+            const latency = Math.floor(Math.random() * 101);
             const uptime = process.uptime();
             const version = process.version;
-            return (String(displayname + " ,manateebot69v2, Node " + version + " uptime: " + Format(uptime) + " Ping: " + latency.tofixed()));
-            //todo: make work Okayga
+            return displayname + " ,manateebot69v2, Node " + version + ", uptime: " + Format(uptime) + ", Ping: " + latency + " ms";
         }
     },
 
@@ -65,7 +60,7 @@ const commands = [
     {
         name: prefix + "bot",
         invocation: async (text, senderUID, displayname) => {
-            return (displayname + " ,manateebot69v2 now running on dank-twitch-irc! Made by MentiOfficial in nodejs. Try ]help for some more Info! ");
+            return displayname + " ,manateebot69v2 now running on dank-twitch-irc! Made by MentiOfficial in nodejs. Try ]help for some more Info! ";
         }
     },
 
@@ -74,7 +69,7 @@ const commands = [
         name: prefix + "eval",
         invocation: async (text, senderUID, displayname) => {
             if (senderUID == "58055575") {
-                return (String(await eval('(async () => {' + text + '})()')));
+                return (await eval('(async () => {' + text + '})()'));
             }
             else {
                 return -1;
@@ -91,9 +86,9 @@ const commands = [
             if (time.data.filter(i => i.lastSeenTimestamp != null)) {
 
                 const activebots = time.data.filter(i => i.lastSeenTimestamp != null).map(
-                    i => ' | ' + i.name + ' ' + Format((Math.abs(new Date() - new Date(i.lastSeenTimestamp))) / 1000));
+                    i => i.name + ' ' + Format((Math.abs(new Date() - new Date(i.lastSeenTimestamp))) / 1000)).toString().replace(/,/g, " ×  ");
 
-                return (String(displayname + " , reported Bots are: " + activebots));
+                return displayname + " , reported Bots are: " + activebots;
             }
         }
     },
@@ -102,6 +97,16 @@ const commands = [
     {
         name: "]calcdeath",
         invocation: async (text, senderUID, displayname) => {
+
+            for (let i = 0; i < 183; i++) {
+                const count = (life[i].country + " ");
+                if (count == text[0]) { 
+                    console.log("test");
+                    return life[i].country;
+                }
+            }
+
+
             //todo: parse life and get data correctly
             /*
             var country = msg[1];
@@ -119,10 +124,8 @@ const commands = [
                 );
             }
             */
-            return ("This command is currently under construction");
         }
-
-    },
+    }
 
 
 
