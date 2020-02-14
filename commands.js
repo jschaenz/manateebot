@@ -110,8 +110,6 @@ const commands = [
 
             for (let i = 0; i < 183; i++) {
                 const countryFromFile = life[i].country;
-                console.log(countryFromFile);
-
 
                 if (countryFromFile == countryFromMsg) { 
                     let lifeleft = Math.round(life[i].life - age);
@@ -124,6 +122,7 @@ const commands = [
                     else return displayname + "you have around " + lifeleft + " years of life left, meaning you will most likely die in " + deathdate;
                 }
             }
+            return "Something went wrong! Check for correct spelling of the Country";
         }
     }
 
