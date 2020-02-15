@@ -105,11 +105,11 @@ const commands = [
             }
             let newText = text.split(" ");
 
-            const countryFromMsg = newText[0];
+            const countryFromMsg = newText[0].toLowerCase();
             const age = newText[1];
 
             for (let i = 0; i < 183; i++) {
-                const countryFromFile = life[i].country;
+                const countryFromFile = life[i].country.toLowerCase();
 
                 if (countryFromFile == countryFromMsg) { 
                     let lifeleft = Math.round(life[i].life - age);
