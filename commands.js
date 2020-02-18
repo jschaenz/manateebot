@@ -1,5 +1,4 @@
 const life = require('./life.json');
-const single = require('./bot.js');
 const fetch = require("node-fetch")
 const prefix = "]";
 
@@ -56,7 +55,7 @@ const commands = [
 
             return displayname + " ,manateebot69v2, Node " + version + ", uptime: " + Format(uptime) + ", Ping: " + latency + " ms, Memory used: " + Math.round(mem * 100) / 100 + " MB";
         }
-        
+
     },
 
 
@@ -74,9 +73,8 @@ const commands = [
             if (senderUID == "58055575") {
                 return (await eval('(async () => {' + text + '})()'));
             }
-            else {
-                return -1;
-            }
+            else return -1;
+            
         }
     },
 
@@ -98,7 +96,7 @@ const commands = [
 
 
     {
-        name: "]calcdeath",
+        name: prefix + "calcdeath",
         invocation: async (text, senderUID, displayname) => {
             if (text.length == 0) {
                 return "use ]calcdeath COUNTRY AGE";
@@ -111,7 +109,7 @@ const commands = [
             for (let i = 0; i < 183; i++) {
                 const countryFromFile = life[i].country.toLowerCase();
 
-                if (countryFromFile == countryFromMsg) { 
+                if (countryFromFile == countryFromMsg) {
                     let lifeleft = Math.round(life[i].life - age);
                     let deathdate = Math.round(lifeleft + 2020);
 
@@ -124,10 +122,29 @@ const commands = [
             }
             return "Something went wrong! Check for correct spelling of the Country";
         }
+    },
+
+    {
+        name: prefix + "reboot",
+        invocation: async (text, senderUID, displayname) => {
+            if (senderUID == "58055575") {
+                const { spawn } = require('child_process');
+                const ls = spawn('ls', ['-lh', '/usr']);
+                
+                ls.stdout.on('data', (data) => {
+                  console.log(`stdout: ${data}`);
+                });
+
+                await spawn.execSync('sudo git pull').toString().replace(/-{2,}/g, "").replace(/\+{2,}/g, "");
+                setTimeout(() => {
+                    process.kill(process.pid)
+                }, 6000);
+
+            }
+            else return -1;
+        }
+
     }
-
-
-
 
 ];
 
