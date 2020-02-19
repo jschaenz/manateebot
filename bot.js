@@ -44,7 +44,6 @@ client.connect();
 client.joinAll(configs.activechannles);
 
 
-
 client.on("PRIVMSG", msg => {
     console.log(`[#${msg.channelName}] ${msg.senderUserID} ${msg.displayName}: ${msg.messageText}`);
 
