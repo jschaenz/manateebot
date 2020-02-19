@@ -2,3 +2,4 @@ config.js
 life.json
 package-lock.json
 /node_modules
+LICENSE.md
