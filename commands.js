@@ -103,7 +103,7 @@ const commands = [
             }
             let newText = text.split(" ");
 
-            const countryFromMsg = newText[0].toLowerCase();
+            const countryFromMsg = newText[0];
             const age = newText[1];
 
             for (let i = 0; i < 183; i++) {
@@ -117,7 +117,7 @@ const commands = [
                         lifeleft = lifeleft * -1;
                         return displayname + " By the avg. Life expectancy you would have died " + lifeleft + " years ago! That was in " + deathdate;
                     }
-                    else return displayname + "you have around " + lifeleft + " years of life left, meaning you will most likely die in " + deathdate;
+                    else return displayname + " you have around " + lifeleft + " years of life left, meaning you will most likely die in " + deathdate;
                 }
             }
             return "Something went wrong! Check for correct spelling of the Country";
@@ -154,7 +154,22 @@ const commands = [
             }
             else return -1;
         }
+    },
+
+    {
+        name: prefix + "bibleverse",
+        invocation: async (text, senderUID, displayname) => {
+            return "under construction"
+        }
+    },
+
+    {
+        name: prefix + "pray",
+        invocation: async (text, senderUID, displayname) => {
+            return "🕋 ThankEgg"
+        }
     }
+
 
 ];
 
