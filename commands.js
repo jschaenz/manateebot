@@ -74,7 +74,7 @@ const commands = [
                 return (await eval('(async () => {' + text + '})()'));
             }
             else return -1;
-            
+
         }
     },
 
@@ -130,12 +130,12 @@ const commands = [
             if (senderUID == "58055575") {
                 const { spawn } = require('child_process');
                 const ls = spawn('ls', ['-lh', '/usr']);
-                
+
                 ls.stdout.on('data', (data) => {
-                  console.log(`stdout: ${data}`);
+                    console.log(`stdout: ${data}`);
                 });
 
-                await spawn.execSync('sudo git pull').toString().replace(/-{2,}/g, "").replace(/\+{2,}/g, "");
+                //await spawn.execSync('sudo git pull').toString().replace(/-{2,}/g, "").replace(/\+{2,}/g, "");
                 setTimeout(() => {
                     process.kill(process.pid)
                 }, 6000);
@@ -144,6 +144,16 @@ const commands = [
             else return -1;
         }
 
+    },
+
+    {
+        name: prefix + "shutdown",
+        invocation: async (text, senderUID, displayname) => {
+            if (senderUID == "58055575") {
+                process.kill(process.pid)
+            }
+            else return -1;
+        }
     }
 
 ];

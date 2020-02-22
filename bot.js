@@ -27,10 +27,9 @@ async function sendOnlineStatus() {
     console.log(ping)
 }
 setInterval(() => { sendOnlineStatus() }, pingTime);
-
 let client = new ChatClient({
     username: "manateebot69",
-    password: configs.pw,
+    password: configs.oauth,
     rateLimits: "default",
 });
 
