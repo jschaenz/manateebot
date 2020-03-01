@@ -1,5 +1,6 @@
 const life = require('./life.json');
 const fetch = require("node-fetch")
+const ping = require('ping');
 const prefix = "]";
 
 
@@ -12,13 +13,13 @@ function Format(second) {
         return minute + 'm';
     } else {
         if (second === 0 || hour === 0 && minute === 0) {
-            return '<1 second'
+            return '<1 second';
         }
         else if (minute === 0 && hour === 0) {
-            return second + "s"
+            return second + "s";
         }
         else {
-            return hour + ' h'
+            return hour + ' h';
         }
     }
 }
@@ -27,40 +28,65 @@ function Format(second) {
 const commands = [
     {
         name: prefix + "help",
+        description: "Shows all commands or if a command is given shows help for the given one",
         invocation: async (text, senderUID, displayname) => {
+            let newText = text.toLowerCase().split(" ");
 
-            const trackObj = commands.filter(
-                q => q.name
-            );
-            const comName = trackObj.map(
-                q => q.name
-            );
+            if (newText.length == 1) {
+                const trackObj = commands.filter(
+                    q => q.name
+                );
+                const comName = trackObj.map(
+                    q => q.name
+                );
 
-            const comNumPre = ((comName.sort().toString().replace(/,/g, " | ").replace(/]/g, '') + " |").split('|')).length;
-            const comNum = comNumPre - 1
+                const comNumPre = ((comName.sort().toString().replace(/,/g, " | ").replace(/]/g, '') + " |").split('|')).length;
+                const comNum = comNumPre - 1
 
-            return displayname + " ,There are " + comNum + " Commands in total:  " + comName.sort().toString().replace(/,/g, " × ").replace(/]/g, '');
+                return displayname + " ,There are " + comNum + " Commands in total:  " + comName.sort().toString().replace(/,/g, " × ").replace(/]/g, '');
+            }
+            else if (commands.filter(i => i.name.substring(1).toLowerCase() === newText[0])) {
+                
+                if (commands.filter(i => i.name.substring(1).toLowerCase() === newText[0]).length != 0) {   // if there is a specified command and the description exists - respond       
+                    return commands.filter((i => i.name.substring(1).toLowerCase() === newText[0])).map(i => i.description)[0]
+                }
+                else if (commands.filter(i => i.name.substring(1).toLowerCase() === newText[0]).length === 0) {  // if specified command does not exist, throw an error
+                    return "This Command does not exist!"
+                }
+            }
         }
     },
 
 
     {
         name: prefix + "ping",
+        description: "Pings the Bot and shows stats, or if a Website is given tries to ping it",
         invocation: async (text, senderUID, displayname) => {
+            let newText = text.split(" ");
 
-            const latency = Math.floor(Math.random() * 101);
-            const uptime = process.uptime();
-            const version = process.version;
-            const mem = process.memoryUsage().heapUsed / 1024 / 1024;
-
-            return displayname + " ,manateebot69v2, Node " + version + ", uptime: " + Format(uptime) + ", Ping: " + latency + " ms, Memory used: " + Math.round(mem * 100) / 100 + " MB";
+            if (newText.length == 1) {
+                const latency = Math.floor(Math.random() * 101);
+                const uptime = process.uptime();
+                const version = process.version;
+                const mem = process.memoryUsage().heapUsed / 1024 / 1024;
+                return displayname + " ,manateebot69v2, Node " + version + ", uptime: " + Format(uptime) + ", Ping: " + latency + " ms, Memory used: " + Math.round(mem * 100) / 100 + " MB";
+            }
+            else {
+                const hosts = [newText[0]];
+                hosts.forEach(function (host) {
+                    ping.sys.probe(host, function (isAlive) {
+                        const result = isAlive ? 'host ' + host + ' is responding SeemsGood' : 'host ' + host + ' is not responding!';
+                        return result;
+                    });
+                });
+            }
         }
-
     },
 
 
     {
         name: prefix + "bot",
+        description:"Shows basic info about the Bot",
         invocation: async (text, senderUID, displayname) => {
             return displayname + " ,manateebot69v2 now running on dank-twitch-irc! Made by MentiOfficial in nodejs. Try ]help for some more Info! ";
         }
@@ -69,6 +95,7 @@ const commands = [
 
     {
         name: prefix + "eval",
+        description:"Runs code given in the Message. Only accessible to verified users",
         invocation: async (text, senderUID, displayname) => {
             if (senderUID == "58055575") {
                 return (await eval('(async () => {' + text + '})()'));
@@ -81,6 +108,7 @@ const commands = [
 
     {
         name: prefix + "bots",
+        description:"Shows all Bots that are reporting to Bot API",
         invocation: async (text, senderUID, displayname) => {
             const time = await fetch("https://supinic.com/api/bot/active").then(response => response.json());
 
@@ -97,6 +125,7 @@ const commands = [
 
     {
         name: prefix + "calcdeath",
+        description:"Lets you calculate your Life Expectancy / Death Date. Use ]calcdeath COUNTRY AGE",
         invocation: async (text, senderUID, displayname) => {
             if (text.length == 0) {
                 return "use ]calcdeath COUNTRY AGE";
@@ -126,16 +155,13 @@ const commands = [
 
     {
         name: prefix + "reboot",
+        description:"Reboots the Bot. Only accessible to verified users",
         invocation: async (text, senderUID, displayname) => {
             if (senderUID == "58055575") {
                 const { spawn } = require('child_process');
                 const ls = spawn('ls', ['-lh', '/usr']);
 
-                ls.stdout.on('data', (data) => {
-                    console.log(`stdout: ${data}`);
-                });
-
-                //await spawn.execSync('sudo git pull').toString().replace(/-{2,}/g, "").replace(/\+{2,}/g, "");
+                await spawn.execSync('sudo git pull').toString().replace(/-{2,}/g, "").replace(/\+{2,}/g, "");
                 setTimeout(() => {
                     process.kill(process.pid)
                 }, 6000);
@@ -148,6 +174,7 @@ const commands = [
 
     {
         name: prefix + "shutdown",
+        description:"Shuts down the Bot. Only accessible to verified users",
         invocation: async (text, senderUID, displayname) => {
             if (senderUID == "58055575") {
                 process.kill(process.pid)
@@ -158,18 +185,41 @@ const commands = [
 
     {
         name: prefix + "bibleverse",
+        description:"Gives the Bible Verse of the Day",
         invocation: async (text, senderUID, displayname) => {
-            return "under construction"
+            return "under construction";
         }
     },
 
     {
         name: prefix + "pray",
+        description:"🕋 ThankEgg",
         invocation: async (text, senderUID, displayname) => {
-            return "🕋 ThankEgg"
+            return "🕋 ThankEgg";
         }
-    }
+    }/*,
 
+    {
+        name: prefix + "",
+        invocation: async (text, senderUID, displayname) => {
+
+        }
+    },
+
+    {
+        name: prefix + "",
+        invocation: async (text, senderUID, displayname) => {
+
+        }
+    },
+
+    {
+        name: prefix + "",
+        invocation: async (text, senderUID, displayname) => {
+
+        }
+    },
+*/
 
 ];
 

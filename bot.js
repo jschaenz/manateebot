@@ -67,7 +67,10 @@ client.on("PRIVMSG", msg => {
 
                     let result = await command.invocation(text.toLowerCase(), msg.senderUserID, msg.displayName);
                     if (result != -1) {
-                        sendMsg(msg.channelName, filter.clean(String(result)));
+                        if(result == undefined){
+                            sendMsg(msg.channelName, filter.clean(String("FeelsDankMan 👉 " + result)));
+                        }
+                        else sendMsg(msg.channelName, filter.clean(String(result)));
                     }
                 }
             }
