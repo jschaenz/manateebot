@@ -2,3 +2,4 @@ config.js
 package-lock.json
 /node_modules
 .vscode/launch.json
+README.MD
