@@ -5,9 +5,9 @@ const prefix = "]";
 const fs = require('fs');
 
 const channels = fs.readFileSync('./channels.txt').toString().split(',').filter(
-	function(i) {
-		return i != null;
-	})
+    function (i) {
+        return i != null;
+    })
 
 function Format(second) {
     var hour = Math.floor(second / 3600);
@@ -221,13 +221,15 @@ const commands = [
         name: prefix + "join",
         description: "Joins the given Channel",
         invocation: async (text, senderUID, displayname) => {
-            if (text.length == 0) {
-                return "No Channel provided!";
-            }
-            else {
-                let newText = text.split(" ");
-                fs.appendFileSync('./channels.txt', ',' + newText[0]);
-                return "Successfully joined!";
+            if (senderUID == "58055575") {
+                if (text.length == 0) {
+                    return "No Channel provided!";
+                }
+                else {
+                    let newText = text.split(" ");
+                    fs.appendFileSync('./channels.txt', ',' + newText[0]);
+                    return 1;
+                }
             }
         }
     },
