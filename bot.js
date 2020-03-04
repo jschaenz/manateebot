@@ -5,7 +5,7 @@ var Filter = require('bad-words'),
 filter = new Filter();
 const mincooldown = 1000;
 const cooldownList = new Set();
-const pingTime = 3600000;
+const pingTime = 3600000; //3600000
 const pingAmount = [];
 var lastMessage = null;
 filter.removeWords('cock', 'hell');
