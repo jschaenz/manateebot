@@ -9,7 +9,13 @@ const pingTime = 3600000;
 const pingAmount = [];
 var lastMessage = null;
 filter.removeWords('cock', 'hell');
+const fs = require('fs');
 
+const channels = fs.readFileSync('./channels.txt').toString().split(',').filter(
+	function(i) {
+		return i != null;
+	})
+console.log(channels);
 
 function sendMsg(channel, message) {
     if (message === lastMessage) {
@@ -40,7 +46,7 @@ client.on("close", error => {
     }
 });
 client.connect();
-client.joinAll(configs.activechannles);
+client.joinAll(channels);
 
 
 client.on("PRIVMSG", msg => {
@@ -69,6 +75,11 @@ client.on("PRIVMSG", msg => {
                     if (result != -1) {
                         if(result == undefined){
                             sendMsg(msg.channelName, filter.clean(String("FeelsDankMan 👉 " + result)));
+                        }
+                        else if(result == "Successfully joined!"){
+                            let newText = text.split(" ");
+                            client.join(newText[0]);
+                            sendMsg(msg.channelName, filter.clean(String(result)));
                         }
                         else sendMsg(msg.channelName, filter.clean(String(result)));
                     }
