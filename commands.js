@@ -1,8 +1,8 @@
 const life = require('./life.json');
 const fetch = require("node-fetch")
-const ping = require('ping');
+const ping = require('node-http-ping');
 const prefix = "]";
-
+const configs = require('./config.js');
 
 function Format(second) {
     var hour = Math.floor(second / 3600);
@@ -72,13 +72,13 @@ const commands = [
                 return displayname + " ,manateebot69v2, Node " + version + ", uptime: " + Format(uptime) + ", Ping: " + latency + " ms, Memory used: " + Math.round(mem * 100) / 100 + " MB";
             }
             else {
-                const hosts = [newText[0]];
-                hosts.forEach(function (host) {
-                    ping.sys.probe(host, function (isAlive) {
-                        const result = isAlive ? 'host ' + host + ' is responding SeemsGood' : 'host ' + host + ' is not responding!';
-                        return result;
-                    });
-                });
+                //ping(newText[0]).then(time => console.log(`Response time: ${time}ms`)).catch(() => console.log('Failed to ping google.com'))
+                ping(newText[0]).then(time =>{
+                    return time;
+                }).catch(()=> {
+                   return "Could not be reached!";
+                })
+               
             }
         }
     },
@@ -192,26 +192,42 @@ const commands = [
     },
 
     {
-        name: prefix + "pray",
+        name: prefix + "prayer",
         description:"🕋 ThankEgg",
         invocation: async (text, senderUID, displayname) => {
             return "🕋 ThankEgg";
         }
-    }/*,
+    },
 
     {
-        name: prefix + "",
+        name: prefix + "channels",
+        descirption:"Shows in how many channels the bot is active. Do channels CHANNELNAME to see if my bot is active in that channel",
         invocation: async (text, senderUID, displayname) => {
-
+            if(text.length == 0){
+                activenum = configs.activechannles.length;
+                return displayname + " I am active in " + activenum + " Channels";
+            }
+            else{
+                let newText = text.split(" ");
+                for (let i of configs.activechannles) {
+                    if(newText[0] == i){
+                        return displayname + " I am active in that Channel FeelsOkayMan";
+                    }
+                }
+                return displayname + " I am not active in that channel FeelsBadMan";
+            }
         }
     },
 
     {
-        name: prefix + "",
+        name: prefix + "rcp",
+        description:"Shows a random picture of my cat(s)",
         invocation: async (text, senderUID, displayname) => {
-
+            let cats = ["https://i.nuuls.com/BOE-j.png", "https://i.nuuls.com/nWgIK.png", "https://i.nuuls.com/PX5TF.png"]
+            let random = cats[Math.floor(Math.random()*cats.length)]
+            return displayname +" " + random;
         }
-    },
+    }/*, 
 
     {
         name: prefix + "",
