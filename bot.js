@@ -76,10 +76,10 @@ client.on("PRIVMSG", msg => {
                         if(result == undefined){
                             sendMsg(msg.channelName, filter.clean(String("FeelsDankMan 👉 " + result)));
                         }
-                        else if(result == "Successfully joined!"){
+                        else if(result == 1){
                             let newText = text.split(" ");
                             client.join(newText[0]);
-                            sendMsg(msg.channelName, filter.clean(String(result)));
+                            sendMsg(msg.channelName, "Successfully Joined!")
                         }
                         else sendMsg(msg.channelName, filter.clean(String(result)));
                     }
