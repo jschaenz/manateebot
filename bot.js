@@ -48,7 +48,6 @@ client.on("close", error => {
 client.connect();
 client.joinAll(channels);
 
-
 client.on("PRIVMSG", msg => {
     console.log(`[#${msg.channelName}] ${msg.senderUserID} ${msg.displayName}: ${msg.messageText}`);
 
