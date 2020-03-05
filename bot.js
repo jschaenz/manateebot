@@ -59,6 +59,7 @@ client.on("PRIVMSG", msg => {
         text += " ";
     }
 
+    
     cmds.commands.forEach(async command => {
         if (message[0] === command.name) {
             try {
