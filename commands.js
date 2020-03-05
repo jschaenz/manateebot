@@ -9,6 +9,11 @@ const channels = fs.readFileSync('./channels.txt').toString().split(',').filter(
         return i != null;
     })
 
+const cats = fs.readFileSync('./cats.txt').toString().split(',').filter(
+    function (i) {
+        return i != null;
+    })
+
 function Format(second) {
     var hour = Math.floor(second / 3600);
     var minute = Math.floor(second % 3600 / 60);
@@ -236,18 +241,27 @@ const commands = [
 
     {
         name: prefix + "rcp",
-        description: "Shows a random picture of my cat(s)",
+        description: "Shows a random picture of my cat(s), use ]rcp size to see how many are registered",
         invocation: async (text, senderUID, displayname) => {
-            let cats = ["https://i.nuuls.com/BOE-j.png", "https://i.nuuls.com/nWgIK.png", "https://i.nuuls.com/PX5TF.png"]
-            let random = cats[Math.floor(Math.random() * cats.length)]
-            return displayname + " " + random;
+            let newText = text.split(" ");
+            if (text.length == 0) {
+                let random = cats[Math.floor(Math.random() * cats.length)]
+                return displayname + " " + random;
+            }
+            else if(newText[0]=="size"){
+                return displayname + " " + "There are " + cats.length + " Images available"
+            }
+            else if (senderUID == "58055575" && newText[0]=="add") {
+                    fs.appendFileSync('./cats.txt', ',' + newText[1]);
+                    return "Link added!";
+            }
         }
     }/*,
 
     {
         name: prefix + "ThankEgg",
         description: "🕋 ThankEgg",
-        invocation: async (text, senderUID, displayname) => {
+        invocation: asyn c (text, senderUID, displayname) => {
             return "🕋 ThankEgg";
         }
     }
