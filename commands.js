@@ -204,7 +204,7 @@ const commands = [
 
     {
         name: prefix + "channels",
-        descirption: "Shows in how many channels the bot is active. Do channels CHANNELNAME to see if my bot is active in that channel",
+        description: "Shows in how many channels the bot is active. Do channels CHANNELNAME to see if my bot is active in that channel",
         invocation: async (text, senderUID, displayname) => {
             if (text.length == 0) {
                 activenum = channels.length;
@@ -236,6 +236,7 @@ const commands = [
                     return 1;
                 }
             }
+            else return -1;
         }
     },
 
@@ -257,7 +258,7 @@ const commands = [
             }
         }
     }
-    
+
 ];
 /*
 reboot: get working
