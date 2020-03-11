@@ -74,7 +74,7 @@ const commands = [
             if (text.length == 0) {
                 return "use ]calcdeath COUNTRY AGE";
             }
-            let newText = text.split(" ");
+            let newText = text.toLowerCase().split(" ");
 
             const countryFromMsg = newText[0];
             const age = newText[1];
@@ -104,7 +104,7 @@ const commands = [
         name: prefix + "ping",
         description: "Pings the Bot and shows stats, or if a Website is given tries to ping it",
         invocation: async (text, senderUID, displayname) => {
-            let newText = text.split(" ");
+            let newText = text.toLowerCase().split(" ");
 
             if (newText.length == 1) {
                 const latency = Math.floor(Math.random() * 101);
@@ -211,7 +211,7 @@ const commands = [
                 return displayname + " I am active in " + activenum + " Channels";
             }
             else {
-                let newText = text.split(" ");
+                let newText = text.toLowerCase().split(" ");
                 for (let i of channels) {
                     if (newText[0] == i) {
                         return displayname + " I am active in that Channel FeelsOkayMan";
@@ -231,7 +231,7 @@ const commands = [
                     return "No Channel provided!";
                 }
                 else {
-                    let newText = text.split(" ");
+                    let newText = text.toLowerCase().split(" ");
                     fs.appendFileSync('./channels.txt', ',' + newText[0]);
                     return 1;
                 }
@@ -256,16 +256,8 @@ const commands = [
                     return "Link added!";
             }
         }
-    }/*,
-
-    {
-        name: prefix + "ThankEgg",
-        description: "🕋 ThankEgg",
-        invocation: asyn c (text, senderUID, displayname) => {
-            return "🕋 ThankEgg";
-        }
     }
-*/
+    
 ];
 /*
 reboot: get working
