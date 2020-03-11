@@ -48,7 +48,6 @@ client.on("close", error => {
 client.connect();
 client.joinAll(channels);
 
-
 client.on("PRIVMSG", msg => {
     console.log(`[#${msg.channelName}] ${msg.senderUserID} ${msg.displayName}: ${msg.messageText}`);
 
@@ -72,7 +71,7 @@ client.on("PRIVMSG", msg => {
                         cooldownList.delete(msg.senderUserID);
                     }, mincooldown);
 
-                    let result = await command.invocation(text.toLowerCase(), msg.senderUserID, msg.displayName);
+                    let result = await command.invocation(text, msg.senderUserID, msg.displayName);
                     if (result != -1) {
                         if(result == undefined){
                             sendMsg(msg.channelName, filter.clean(String("FeelsDankMan 👉 " + result)));
