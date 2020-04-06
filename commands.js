@@ -14,6 +14,12 @@ const cats = fs.readFileSync('./cats.txt').toString().split(',').filter(
         return i != null;
     })
 
+const suggestions = fs.readFileSync('./suggestions.txt').toString().split(',').filter(
+    function (i) {
+        return i != null;
+    })
+
+
 function Format(second) {
     var hour = Math.floor(second / 3600);
     var minute = Math.floor(second % 3600 / 60);
@@ -67,7 +73,7 @@ const commands = [
         }
     },
 
-    {
+    {/*
         name: prefix + "calcdeath",
         description: "Lets you calculate your Life Expectancy / Death Date. Use ]calcdeath COUNTRY AGE",
         invocation: async (text, senderUID, displayname) => {
@@ -97,7 +103,7 @@ const commands = [
                 }
                 return "Something went wrong! Check for correct spelling of the Country";
             }
-        }
+        } */
     },
 
     {
@@ -195,14 +201,6 @@ const commands = [
     },
 
     {
-        name: prefix + "bibleverse",
-        description: "Gives the Bible Verse of the Day",
-        invocation: async (text, senderUID, displayname) => {
-            return "under construction";
-        }
-    },
-
-    {
         name: prefix + "channels",
         description: "Shows in how many channels the bot is active. Do channels CHANNELNAME to see if my bot is active in that channel",
         invocation: async (text, senderUID, displayname) => {
@@ -249,12 +247,30 @@ const commands = [
                 let random = cats[Math.floor(Math.random() * cats.length)]
                 return displayname + " " + random;
             }
-            else if(newText[0]=="size"){
-                return displayname + " " + "There are " + cats.length + " Images available"
+            else if (newText[0] == "size") {
+                return displayname + " There are " + cats.length + " Images available"
             }
-            else if (senderUID == "58055575" && newText[0]=="add") {
-                    fs.appendFileSync('./cats.txt', ',' + newText[1]);
-                    return "Link added!";
+            else if (senderUID == "58055575" && newText[0] == "add") {
+                fs.appendFileSync('./cats.txt', ',' + newText[1]);
+                return "Link added!";
+            }
+        }
+    },
+
+    {
+        name: prefix + "suggest",
+        description: "Input any suggestions you have for the bot",
+        invocation: async (text, senderUID, displayname) => {
+            let newText = text.split(" ");
+            if (text.length == 0) {
+                return "No Suggestion provided FeelsDankMan";
+            }
+            else if (newText[0] == "size") {
+                return displayname + " There are " + suggestions.length + " Suggestions logged";
+            }
+            else{
+                fs.appendFileSync('./suggestions.txt', ',' + text);
+                return "Suggestion '" + text + "' saved!"
             }
         }
     }
