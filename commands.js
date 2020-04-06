@@ -73,39 +73,6 @@ const commands = [
         }
     },
 
-    {/*
-        name: prefix + "calcdeath",
-        description: "Lets you calculate your Life Expectancy / Death Date. Use ]calcdeath COUNTRY AGE",
-        invocation: async (text, senderUID, displayname) => {
-            if (text.length == 0) {
-                return "use ]calcdeath COUNTRY AGE";
-            }
-            let newText = text.toLowerCase().split(" ");
-
-            const countryFromMsg = newText[0];
-            const age = newText[1];
-            if (age < 0 || (age % 1 != age)) {
-                return displayname + " Please enter a Valid age"
-            }
-            else {
-                for (let i = 0; i < 183; i++) {
-                    const countryFromFile = life[i].country.toLowerCase();
-                    if (countryFromFile == countryFromMsg) {
-                        let lifeleft = Math.round(life[i].life - age);
-                        let deathdate = Math.round(lifeleft + 2020);
-
-                        if (lifeleft < 0) {
-                            lifeleft = lifeleft * -1;
-                            return displayname + " By the avg. Life expectancy you would have died " + lifeleft + " years ago! That was in " + deathdate;
-                        }
-                        else return displayname + " you have around " + lifeleft + " years of life left, meaning you will most likely die in " + deathdate;
-                    }
-                }
-                return "Something went wrong! Check for correct spelling of the Country";
-            }
-        } */
-    },
-
     {
         name: prefix + "ping",
         description: "Pings the Bot and shows stats, or if a Website is given tries to ping it",
@@ -118,15 +85,6 @@ const commands = [
                 const version = process.version;
                 const mem = process.memoryUsage().heapUsed / 1024 / 1024;
                 return displayname + " ,manateebot69v2, Node " + version + ", uptime: " + Format(uptime) + ", Ping: " + latency + " ms, Memory used: " + Math.round(mem * 100) / 100 + " MB";
-            }
-            else {
-                //ping(newText[0]).then(time => console.log(`Response time: ${time}ms`)).catch(() => console.log('Failed to ping google.com'))
-                ping(newText[0]).then(time => {
-                    return time;
-                }).catch(() => {
-                    return "Could not be reached!";
-                })
-
             }
         }
     },
@@ -164,30 +122,7 @@ const commands = [
                 return displayname + " reported Bots are: " + activebots;
             }
         }
-    },/*
-
-    {
-        name: prefix + "reboot",
-        description: "Reboots the Bot. Only accessible to verified users",
-        invocation: async (text, senderUID, displayname) => {
-            if (senderUID == "58055575") {
-                const { spawn } = require('child_process');
-
-                const restartProcess = () => {
-                    spawn(process.argv[1], process.argv.slice(2), {
-                        detached: true,
-                        stdio: ['ignore', out, err]
-                    }).unref()
-                    process.exit()
-                }
-                restartProcess();
-                setTimeout(() => {
-                    process.kill(process.pid)
-                }, 6000);
-            }
-            else return -1;
-        }
-    },*/
+    },
 
     {
         name: prefix + "shutdown",
@@ -268,7 +203,7 @@ const commands = [
             else if (newText[0] == "size") {
                 return displayname + " There are " + suggestions.length + " Suggestions logged";
             }
-            else{
+            else {
                 fs.appendFileSync('./suggestions.txt', ',' + text);
                 return "Suggestion '" + text + "' saved!"
             }
@@ -276,10 +211,5 @@ const commands = [
     }
 
 ];
-/*
-reboot: get working
-ping: get ping website to work
-calcdeath: sometimes doesnt work
-*/
 
 module.exports = { commands };
